@@ -19,7 +19,6 @@ import java.util.Set;
             @UniqueConstraint(columnNames = "username"),
             @UniqueConstraint(columnNames = "email")
         })
-@ToString(exclude = {"products"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,10 +58,13 @@ public class User {
                 inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true)
     private Set<Product> products;
 
-
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.PERSIST}, orphanRemoval = true)
+    private Cart cart;
 }
